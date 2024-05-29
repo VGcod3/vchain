@@ -5,17 +5,18 @@ const ec = new EC("secp256k1");
 
 export class Wallet {
   public publicKey: string;
-  private readonly privateKey: string;
+  private readonly keypair: EC.KeyPair;
 
   constructor() {
-    const keypair = ec.genKeyPair();
-    this.publicKey = keypair.getPublic("hex");
-    this.privateKey = keypair.getPrivate("hex");
+    this.keypair = ec.genKeyPair();
+    this.publicKey = this.keypair.getPublic("hex");
   }
 
   createTransaction(toAddress: string, amount: number): Transaction {
     const transaction = new Transaction(this.publicKey, toAddress, amount);
-    transaction.signTransaction(ec.keyFromPrivate(this.privateKey));
+    const signingKey = ec.keyFromPrivate(this.keypair.getPrivate("hex"));
+
+    transaction.signTransaction(signingKey);
     return transaction;
   }
 }

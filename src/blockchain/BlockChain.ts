@@ -9,40 +9,32 @@ export class Blockchain {
 
   constructor() {
     this.chain = [this.createGenesisBlock()];
+    this.pendingTransactions = [];
     this.difficulty = 4;
     this.miningReward = 50; // Set the mining reward to 50 units
   }
 
   minePendingTransactions(miningRewardAddress: string): void {
-    // Limit the number of transactions per block
-    const transactionLimit = 10;
-    const txSubArray = this.pendingTransactions.slice(0, transactionLimit);
-
-    // Include the mining reward as a transaction in the block
     const rewardTx = new Transaction(
-      "MINING_REWARD",
+      "MINING_REVARD",
       miningRewardAddress,
       this.miningReward
     );
-    txSubArray.push(rewardTx);
+    this.pendingTransactions.push(rewardTx);
 
     const block = new Block(
-      this.chain.length,
       Date.now(),
-      txSubArray,
+      this.pendingTransactions,
       this.getLatestBlock().hash
     );
     block.mineBlock(this.difficulty);
 
-    console.log("Block successfully mined!");
     this.chain.push(block);
-
-    // Remove mined transactions from the pending transactions array
-    this.pendingTransactions = this.pendingTransactions.slice(transactionLimit);
+    this.pendingTransactions = [];
   }
 
   createGenesisBlock(): Block {
-    return new Block(0, Date.now(), [], "0");
+    return new Block(Date.now(), [], "0");
   }
 
   getLatestBlock(): Block {
@@ -50,6 +42,10 @@ export class Blockchain {
   }
 
   addTransaction(transaction: Transaction): void {
+    if (!transaction.fromAddress || !transaction.toAddress) {
+      throw new Error("Transaction must include from and to address");
+    }
+
     if (!transaction.isValid()) {
       throw new Error("Cannot add invalid transaction to chain");
     }

@@ -72,7 +72,6 @@ class CLI {
     this.blockchain.chain.forEach((block, index) => {
       console.log(`\nBlock ${index}`);
       console.table({
-        index: block.index,
         hash: block.hash,
         previousHash: block.previousHash,
         timestamp: `${block.timestamp} | ${new Date(
