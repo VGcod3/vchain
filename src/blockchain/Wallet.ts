@@ -1,4 +1,4 @@
-import { Transaction } from "./src/Transaction";
+import { Transaction } from "./Transaction";
 import { ec as EC } from "elliptic";
 
 const ec = new EC("secp256k1");

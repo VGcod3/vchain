@@ -1,3 +1,8 @@
-import { main } from "./cli";
+import { CLI } from "./cli";
+
+async function main() {
+  const cli = new CLI();
+  await cli.start();
+}
 
 main();
