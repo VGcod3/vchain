@@ -1,5 +1,5 @@
 import * as readline from "readline";
-import { Blockchain } from "./Blockchain";
+import { Blockchain } from "./BlockChain";
 import { Wallet } from "./Wallet";
 
 const myBlockchain = new Blockchain();
